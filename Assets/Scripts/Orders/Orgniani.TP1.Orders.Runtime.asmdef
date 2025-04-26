@@ -1,0 +1,17 @@
+{
+    "name": "Orgniani.TP1.Orders.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c23ea63ff1f3f9f459aca3ddd8d08897",
+        "GUID:2ed4e7da15855be4da421fc7dbb2cc69"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
