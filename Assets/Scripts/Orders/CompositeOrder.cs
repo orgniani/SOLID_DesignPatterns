@@ -18,14 +18,11 @@ namespace Orders
             return _orders.Sum(order => order.GetPrice());
         }
 
-        public void ShowDetails()
+        public float GetPreparationTime()
         {
-            Debug.Log("Composite Order:");
-            foreach (var order in _orders)
-            {
-                order.ShowDetails();
-            }
+            return _orders.Sum(order => order.GetPreparationTime());
         }
+
         public List<IOrder> GetOrders()
         {
             return _orders;

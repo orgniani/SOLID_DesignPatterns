@@ -30,7 +30,6 @@ namespace Orders
             float totalPrice = order.GetPrice();
             float finalPrice = _discountStrategy != null ? _discountStrategy.ApplyDiscount(totalPrice) : totalPrice;
 
-            order.ShowDetails();
             Debug.Log($"Final Price after discount: ${finalPrice}");
 
             NotifyAll("Your order is ready!");

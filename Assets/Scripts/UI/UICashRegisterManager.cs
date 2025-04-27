@@ -28,11 +28,21 @@ namespace UI
         [SerializeField] private TMP_Text priceText;
         [SerializeField] private TMP_Text logText;
 
+        [Header("Input Fields")]
+        [SerializeField] private TMP_InputField employeeName;
+        [SerializeField] private TMP_InputField customerName;
+
+        [Header("Blocker")]
+        [SerializeField] private GameObject screenBlocker;
+
         [Header("Parameters")]
         [SerializeField] private float receiptTextDelay = 1f;
 
         private OrderManager _orderManager;
         private UIReceiptManager _receiptManager;
+
+        private Customer _currentCustomer;
+        private Employee _currentEmployee;
 
         private List<IOrder> _pendingOrders = new();
 
@@ -40,14 +50,10 @@ namespace UI
         {
             ValidateReferences();
 
+            screenBlocker.SetActive(false);
+
             _orderManager = new OrderManager();
             _receiptManager = new UIReceiptManager(_orderManager, receiptText, receiptTextDelay);
-
-            Customer customer = new Customer();
-            Employee employee = new Employee();
-
-            _orderManager.Subscribe(customer);
-            _orderManager.Subscribe(employee);
 
             SetupButtons();
 
@@ -68,7 +74,6 @@ namespace UI
 
             processOrderButton.onClick.AddListener(ProcessOrder);
             cancelOrderButton.onClick.AddListener(CancelOrder);
-
         }
 
         private void CreateCoffee() => AddOrder(new CoffeeFactory().CreateOrder());
@@ -93,9 +98,11 @@ namespace UI
 
         private void TryApplyDiscount(IDiscountStrategy discountStrategy, string discountName = null)
         {
-            if (_orderManager.GetAppliedDiscount() != null)
+            bool isVolumeDiscount = discountStrategy is VolumeDiscount;
+
+            if (_orderManager.GetAppliedDiscount() != null && !isVolumeDiscount)
             {
-                LogMessage("A discount has already been applied.");
+                LogMessage($"Cannot apply {discountName}: another discount has already been applied.");
                 return;
             }
 
@@ -116,20 +123,44 @@ namespace UI
             ApplyVolumeDiscount();
             CompositeOrder fullOrder = BuildCompositeOrder(_pendingOrders);
 
+            _orderManager.Subscribe(_currentCustomer);
+            _orderManager.Subscribe(_currentEmployee);
+
             StartCoroutine(ProcessOrderCoroutine(fullOrder));
         }
 
         private IEnumerator ProcessOrderCoroutine(IOrder fullOrder)
         {
+            screenBlocker.SetActive(true);
+
             float finalPrice = _orderManager.GetFinalPrice(fullOrder);
 
             priceText.text = $"Total: ${finalPrice:F2}\n";
 
             yield return StartCoroutine(_receiptManager.BuildReceiptCoroutine(fullOrder));
 
+            float preparationTime = fullOrder.GetPreparationTime();
+            yield return StartCoroutine(PreparationCountdown(preparationTime));
+
             _orderManager.ProcessOrder(fullOrder);
             _pendingOrders.Clear();
             LogMessage("Order processed!");
+
+            ResetInputField(customerName);
+            ResetInputField(employeeName);
+
+            screenBlocker.SetActive(false);
+        }
+
+        private IEnumerator PreparationCountdown(float duration)
+        {
+            float timer = duration;
+            while (timer > 0)
+            {
+                LogMessage($"Preparing... {timer:F0} seconds left!");
+                timer -= Time.deltaTime;
+                yield return null;
+            }
         }
 
         private void CancelOrder()
@@ -143,9 +174,18 @@ namespace UI
             _pendingOrders.Clear();
             receiptText.text = "";
             priceText.text = "";
+
+            ResetInputField(customerName);
+            ResetInputField(employeeName);
+
             LogMessage("Pending order canceled.");
         }
 
+        private void ResetInputField(TMP_InputField inputField)
+        {
+            inputField.text = string.Empty;
+            inputField.placeholder.gameObject.SetActive(true);
+        }
         private CompositeOrder BuildCompositeOrder(List<IOrder> orders)
         {
             CompositeOrder compositeOrder = new CompositeOrder();
@@ -158,6 +198,12 @@ namespace UI
 
         private void AddOrder(IOrder order)
         {
+            if (_pendingOrders.Count == 0)
+            {
+                _currentCustomer = new Customer(customerName.text);
+                _currentEmployee = new Employee(employeeName.text);
+            }
+
             _pendingOrders.Add(order);
             UpdatePrices();
             LogMessage($"Added {UIOrderNameHelper.GetOrderName(order)}.");
@@ -172,7 +218,6 @@ namespace UI
         private void LogMessage(string message)
         {
             logText.text = message;
-            Debug.Log(message);
         }
 
         private void ValidateReferences()
