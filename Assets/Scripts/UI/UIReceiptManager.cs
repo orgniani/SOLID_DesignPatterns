@@ -1,5 +1,4 @@
 using Orders;
-using PlasticPipe.PlasticProtocol.Messages;
 
 namespace UI
 {
@@ -16,7 +15,7 @@ namespace UI
                 {
                     float price = item.GetPrice();
                     subtotal += price;
-                    receipt += $"{GetOrderName(item)} ... ${price:F2}\n";
+                    receipt += $"{UIOrderNameHelper.GetOrderName(item)} ... ${price:F2}\n";
                 }
             }
 
@@ -24,7 +23,7 @@ namespace UI
             {
                 float price = order.GetPrice();
                 subtotal += price;
-                receipt += $"{GetOrderName(order)} ... ${price:F2}\n";
+                receipt += $"{UIOrderNameHelper.GetOrderName(order)} ... ${price:F2}\n";
             }
 
             receipt += "\n";
@@ -32,33 +31,15 @@ namespace UI
             float finalPrice = orderManager.GetFinalPrice(order);
             float discountAmount = subtotal - finalPrice;
 
-            if (discountAmount > 0f)
+            if (discountAmount > 0f && orderManager.GetAppliedDiscount() != null)
             {
-                receipt += $"Discount Applied: -${discountAmount:F2}\n";
+                receipt += $"{orderManager.GetAppliedDiscount().GetName()} Discount Applied: -${discountAmount:F2}\n";
             }
 
             receipt += "-----\n";
             receipt += $"Total: ${finalPrice:F2}\n";
 
             return receipt;
-        }
-
-        private string GetOrderName(IOrder order)
-        {
-            if (order is SimpleOrder simpleOrder)
-            {
-                return simpleOrder.Name;
-            }
-
-            else if (order is CompositeOrder)
-            {
-                return "Combo";
-            }
-
-            else
-            {
-                return "Unknown";
-            }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace UI
         [SerializeField] private Button applyCashDiscountButton;
         [SerializeField] private Button applyMembershipDiscountButton;
         [SerializeField] private Button processOrderButton;
+        [SerializeField] private Button cancelOrderButton;
 
         [Header("Texts")]
         [SerializeField] private TMP_Text receiptText;
@@ -49,7 +50,6 @@ namespace UI
             receiptText.text = "";
             priceText.text = "";
             logText.text = "";
-
         }
 
         private void SetupButtons()
@@ -63,6 +63,8 @@ namespace UI
             applyMembershipDiscountButton.onClick.AddListener(ApplyMembershipDiscount);
 
             processOrderButton.onClick.AddListener(ProcessOrder);
+            cancelOrderButton.onClick.AddListener(CancelOrder);
+
         }
 
         private void CreateCoffee() => AddOrder(new CoffeeFactory().CreateOrder());
@@ -72,25 +74,42 @@ namespace UI
 
         private void ApplyCashDiscount()
         {
-            _orderManager.SetDiscountStrategy(new CashDiscount());
-            LogMessage("Cash Discount applied.");
+            TryApplyDiscount(new CashDiscount(), "Cash Discount");
         }
 
         private void ApplyMembershipDiscount()
         {
-            _orderManager.SetDiscountStrategy(new MembershipDiscount());
-            LogMessage("Membership Discount applied.");
+            TryApplyDiscount(new MembershipDiscount(), "Membership Discount");
+        }
+
+        private void ApplyVolumeDiscount()
+        {
+            TryApplyDiscount(new VolumeDiscount());
+        }
+
+        private void TryApplyDiscount(IDiscountStrategy discountStrategy, string discountName = null)
+        {
+            if (_orderManager.GetAppliedDiscount() != null)
+            {
+                LogMessage("A discount has already been applied.");
+                return;
+            }
+
+            _orderManager.SetDiscountStrategy(discountStrategy);
+
+            if (!string.IsNullOrEmpty(discountName))
+                LogMessage($"{discountName} applied.");
         }
 
         private void ProcessOrder()
         {
             if (_pendingOrders.Count == 0)
             {
-                LogMessage("No orders to process.");
+                LogMessage("No order to process.");
                 return;
             }
 
-            _orderManager.SetDiscountStrategy(new VolumeDiscount());
+            ApplyVolumeDiscount();
 
             CompositeOrder fullOrder = BuildCompositeOrder(_pendingOrders);
             string finalReceipt = _receiptManager.BuildReceipt(fullOrder, _orderManager);
@@ -105,6 +124,20 @@ namespace UI
             LogMessage("Order processed!");
         }
 
+        private void CancelOrder()
+        {
+            if (_pendingOrders.Count == 0)
+            {
+                LogMessage("No pending order to cancel.");
+                return;
+            }
+
+            _pendingOrders.Clear();
+            receiptText.text = "";
+            priceText.text = "";
+            LogMessage("Pending order canceled.");
+        }
+
         private CompositeOrder BuildCompositeOrder(List<IOrder> orders)
         {
             CompositeOrder compositeOrder = new CompositeOrder();
@@ -115,35 +148,17 @@ namespace UI
             return compositeOrder;
         }
 
-        private string GetOrderName(IOrder order)
-        {
-            if (order is SimpleOrder simpleOrder)
-            {
-                return simpleOrder.Name;
-            }
-
-            else if (order is CompositeOrder)
-            {
-                return "Combo";
-            }
-
-            else
-            {
-                return "Unknown";
-            }
-        }
-
         private void AddOrder(IOrder order)
         {
             _pendingOrders.Add(order);
-            UpdateOrderList();
-            LogMessage($"Added {GetOrderName(order)}.");
+            UpdatePrices();
+            LogMessage($"Added {UIOrderNameHelper.GetOrderName(order)}.");
         }
 
-        private void UpdateOrderList()
+        private void UpdatePrices()
         {
             foreach (var order in _pendingOrders)
-                priceText.text = $"{GetOrderName(order)} ... ${order.GetPrice():F2}";
+                priceText.text = $"{UIOrderNameHelper.GetOrderName(order)} ... ${order.GetPrice():F2}";
         }
 
         private void LogMessage(string message)
@@ -205,6 +220,14 @@ namespace UI
             if (!processOrderButton)
             {
                 Debug.LogError($"{name}: {nameof(processOrderButton)} is null!" +
+                               $"\nDisabling component to avoid errors.");
+                enabled = false;
+                return;
+            }
+
+            if (!cancelOrderButton)
+            {
+                Debug.LogError($"{name}: {nameof(cancelOrderButton)} is null!" +
                                $"\nDisabling component to avoid errors.");
                 enabled = false;
                 return;

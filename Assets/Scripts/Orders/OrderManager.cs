@@ -20,6 +20,11 @@ namespace Orders
             _discountStrategy = discountStrategy;
         }
 
+        public IDiscountStrategy GetAppliedDiscount()
+        {
+            return _discountStrategy;
+        }
+
         public void ProcessOrder(IOrder order)
         {
             float totalPrice = order.GetPrice();
@@ -29,6 +34,8 @@ namespace Orders
             Debug.Log($"Final Price after discount: ${finalPrice}");
 
             NotifyAll("Your order is ready!");
+
+            _discountStrategy = null;
         }
 
         public float GetFinalPrice(IOrder order)
