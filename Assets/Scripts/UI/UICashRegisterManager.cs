@@ -7,6 +7,7 @@ using Discounts;
 using Notifications;
 using Orders;
 using Factories;
+using System.Collections;
 
 namespace UI
 {
@@ -27,6 +28,9 @@ namespace UI
         [SerializeField] private TMP_Text priceText;
         [SerializeField] private TMP_Text logText;
 
+        [Header("Parameters")]
+        [SerializeField] private float receiptTextDelay = 1f;
+
         private OrderManager _orderManager;
         private UIReceiptManager _receiptManager;
 
@@ -37,7 +41,7 @@ namespace UI
             ValidateReferences();
 
             _orderManager = new OrderManager();
-            _receiptManager = new UIReceiptManager();
+            _receiptManager = new UIReceiptManager(_orderManager, receiptText, receiptTextDelay);
 
             Customer customer = new Customer();
             Employee employee = new Employee();
@@ -110,14 +114,18 @@ namespace UI
             }
 
             ApplyVolumeDiscount();
-
             CompositeOrder fullOrder = BuildCompositeOrder(_pendingOrders);
-            string finalReceipt = _receiptManager.BuildReceipt(fullOrder, _orderManager);
 
-            receiptText.text = finalReceipt;
+            StartCoroutine(ProcessOrderCoroutine(fullOrder));
+        }
 
+        private IEnumerator ProcessOrderCoroutine(IOrder fullOrder)
+        {
             float finalPrice = _orderManager.GetFinalPrice(fullOrder);
+
             priceText.text = $"Total: ${finalPrice:F2}\n";
+
+            yield return StartCoroutine(_receiptManager.BuildReceiptCoroutine(fullOrder));
 
             _orderManager.ProcessOrder(fullOrder);
             _pendingOrders.Clear();

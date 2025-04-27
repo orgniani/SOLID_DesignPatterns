@@ -1,45 +1,80 @@
 using Orders;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
     public class UIReceiptManager
     {
-        public string BuildReceipt(IOrder order, OrderManager orderManager)
+        private OrderManager _orderManager;
+
+        private TMP_Text _receiptText;
+        private float _lineDelay;
+
+        private RectTransform _receipt;
+
+        public UIReceiptManager(OrderManager orderManager, TMP_Text receiptText, float lineDelay = 0.5f)
         {
-            string receipt = "Receipt\n";
+            _orderManager = orderManager;
+
+            _receiptText = receiptText;
+            _lineDelay = lineDelay;
+
+            _receipt = _receiptText.rectTransform.parent.GetComponent<RectTransform>();
+        }
+
+        public IEnumerator BuildReceiptCoroutine(IOrder order)
+        {
             float subtotal = 0f;
 
-            if (order is CompositeOrder composite)
-            {
-                foreach (var item in composite.GetOrders())
-                {
-                    float price = item.GetPrice();
-                    subtotal += price;
-                    receipt += $"{UIOrderNameHelper.GetOrderName(item)} ... ${price:F2}\n";
-                }
-            }
+            _receiptText.text = "";
 
-            else
+            AddLineToReceipt("- Receipt -");
+            yield return new WaitForSeconds(_lineDelay);
+
+            foreach (var item in GetOrders(order))
             {
-                float price = order.GetPrice();
+                float price = item.GetPrice();
                 subtotal += price;
-                receipt += $"{UIOrderNameHelper.GetOrderName(order)} ... ${price:F2}\n";
+
+                AddLineToReceipt($"{UIOrderNameHelper.GetOrderName(item)} ... ${price:F2}");
+                yield return new WaitForSeconds(_lineDelay);
             }
 
-            receipt += "\n";
+            yield return new WaitForSeconds(_lineDelay);
 
-            float finalPrice = orderManager.GetFinalPrice(order);
+            float finalPrice = _orderManager.GetFinalPrice(order);
             float discountAmount = subtotal - finalPrice;
 
-            if (discountAmount > 0f && orderManager.GetAppliedDiscount() != null)
+            if (discountAmount > 0f && _orderManager.GetAppliedDiscount() != null)
             {
-                receipt += $"{orderManager.GetAppliedDiscount().GetName()} Discount Applied: -${discountAmount:F2}\n";
+                AddLineToReceipt($" \n {_orderManager.GetAppliedDiscount().GetName()} Discount Applied: -${discountAmount:F2}");
+                yield return new WaitForSeconds(_lineDelay);
             }
 
-            receipt += "-----\n";
-            receipt += $"Total: ${finalPrice:F2}\n";
+            AddLineToReceipt("\n -----");
+            yield return new WaitForSeconds(_lineDelay);
 
-            return receipt;
+            AddLineToReceipt($"Total: ${finalPrice:F2}");
         }
+
+        private void AddLineToReceipt(string line)
+        {
+            _receiptText.text += line + "\n";
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_receipt);
+        }
+
+        private IEnumerable<IOrder> GetOrders(IOrder order)
+        {
+            if (order is CompositeOrder composite)
+                return composite.GetOrders();
+            else
+                return new List<IOrder> { order };
+        }
+
     }
 }
