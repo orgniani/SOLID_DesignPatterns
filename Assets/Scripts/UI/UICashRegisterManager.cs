@@ -17,12 +17,13 @@ namespace UI
         [SerializeField] private Button createTeaButton;
         [SerializeField] private Button createCakeButton;
         [SerializeField] private Button createComboButton;
-        [SerializeField] private Button applyVolumeDiscountButton;
+        [SerializeField] private Button applyCashDiscountButton;
         [SerializeField] private Button applyMembershipDiscountButton;
         [SerializeField] private Button processOrderButton;
 
         [Header("Texts")]
         [SerializeField] private TMP_Text receiptText;
+        [SerializeField] private TMP_Text priceText;
         [SerializeField] private TMP_Text logText;
 
         private OrderManager _orderManager;
@@ -37,13 +38,18 @@ namespace UI
             _orderManager = new OrderManager();
             _receiptManager = new UIReceiptManager();
 
-            Customer customer = new Customer("Pedro");
-            Employee employee = new Employee("Cata");
+            Customer customer = new Customer();
+            Employee employee = new Employee();
 
             _orderManager.Subscribe(customer);
             _orderManager.Subscribe(employee);
 
             SetupButtons();
+
+            receiptText.text = "";
+            priceText.text = "";
+            logText.text = "";
+
         }
 
         private void SetupButtons()
@@ -53,7 +59,7 @@ namespace UI
             createCakeButton.onClick.AddListener(CreateCake);
             createComboButton.onClick.AddListener(CreateCombo);
 
-            applyVolumeDiscountButton.onClick.AddListener(ApplyVolumeDiscount);
+            applyCashDiscountButton.onClick.AddListener(ApplyCashDiscount);
             applyMembershipDiscountButton.onClick.AddListener(ApplyMembershipDiscount);
 
             processOrderButton.onClick.AddListener(ProcessOrder);
@@ -64,10 +70,10 @@ namespace UI
         private void CreateCake() => AddOrder(new CakeFactory().CreateOrder());
         private void CreateCombo() => AddOrder(new ComboFactory().CreateOrder());
 
-        private void ApplyVolumeDiscount()
+        private void ApplyCashDiscount()
         {
-            _orderManager.SetDiscountStrategy(new VolumeDiscount());
-            LogMessage("Volume Discount applied.");
+            _orderManager.SetDiscountStrategy(new CashDiscount());
+            LogMessage("Cash Discount applied.");
         }
 
         private void ApplyMembershipDiscount()
@@ -84,10 +90,15 @@ namespace UI
                 return;
             }
 
+            _orderManager.SetDiscountStrategy(new VolumeDiscount());
+
             CompositeOrder fullOrder = BuildCompositeOrder(_pendingOrders);
             string finalReceipt = _receiptManager.BuildReceipt(fullOrder, _orderManager);
 
             receiptText.text = finalReceipt;
+
+            float finalPrice = _orderManager.GetFinalPrice(fullOrder);
+            priceText.text = $"Total: ${finalPrice:F2}\n";
 
             _orderManager.ProcessOrder(fullOrder);
             _pendingOrders.Clear();
@@ -131,11 +142,8 @@ namespace UI
 
         private void UpdateOrderList()
         {
-            receiptText.text = "Pending Orders:\n";
             foreach (var order in _pendingOrders)
-            {
-                receiptText.text += $"- {GetOrderName(order)}\n";
-            }
+                priceText.text = $"{GetOrderName(order)} ... ${order.GetPrice():F2}";
         }
 
         private void LogMessage(string message)
@@ -178,9 +186,9 @@ namespace UI
                 return;
             }
 
-            if (!applyVolumeDiscountButton)
+            if (!applyCashDiscountButton)
             {
-                Debug.LogError($"{name}: {nameof(applyVolumeDiscountButton)} is null!" +
+                Debug.LogError($"{name}: {nameof(applyCashDiscountButton)} is null!" +
                                $"\nDisabling component to avoid errors.");
                 enabled = false;
                 return;

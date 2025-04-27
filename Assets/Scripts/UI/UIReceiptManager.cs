@@ -1,4 +1,5 @@
 using Orders;
+using PlasticPipe.PlasticProtocol.Messages;
 
 namespace UI
 {
@@ -6,7 +7,7 @@ namespace UI
     {
         public string BuildReceipt(IOrder order, OrderManager orderManager)
         {
-            string receipt = "==== Coffee Shop Receipt ====\n";
+            string receipt = "Receipt\n";
             float subtotal = 0f;
 
             if (order is CompositeOrder composite)
@@ -15,7 +16,7 @@ namespace UI
                 {
                     float price = item.GetPrice();
                     subtotal += price;
-                    receipt += $"{GetOrderName(item),-15} ${price:F2}\n";
+                    receipt += $"{GetOrderName(item)} ... ${price:F2}\n";
                 }
             }
 
@@ -23,7 +24,7 @@ namespace UI
             {
                 float price = order.GetPrice();
                 subtotal += price;
-                receipt += $"{GetOrderName(order),-15} ${price:F2}\n";
+                receipt += $"{GetOrderName(order)} ... ${price:F2}\n";
             }
 
             receipt += "\n";
@@ -36,7 +37,7 @@ namespace UI
                 receipt += $"Discount Applied: -${discountAmount:F2}\n";
             }
 
-            receipt += "-----------------------------\n";
+            receipt += "-----\n";
             receipt += $"Total: ${finalPrice:F2}\n";
 
             return receipt;

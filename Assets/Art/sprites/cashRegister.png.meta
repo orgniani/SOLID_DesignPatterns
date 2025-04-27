@@ -1,0 +1,331 @@
+fileFormatVersion: 2
+guid: 0ca6172ae17434a4ca5423411fb2eda7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4962895389527774512
+    second: cashRegister_0
+  - first:
+      213: -7332015561761311920
+    second: cashRegister_1
+  - first:
+      213: 4125472049029605762
+    second: cashRegister_2
+  - first:
+      213: -8787249350005452161
+    second: cashRegister_3
+  - first:
+      213: 1194870186283202588
+    second: cashRegister_4
+  - first:
+      213: 2712756254717647670
+    second: cashRegister_5
+  - first:
+      213: -1701001446991912682
+    second: cashRegister_6
+  - first:
+      213: 8991428456129315486
+    second: cashRegister_7
+  - first:
+      213: -4321888650523292173
+    second: cashRegister_8
+  - first:
+      213: -6901716233662063401
+    second: cashRegister_9
+  - first:
+      213: -6738332728838933099
+    second: cashRegister_10
+  - first:
+      213: -4223157577932137669
+    second: cashRegister_11
+  - first:
+      213: -7999578252026992064
+    second: cashRegister_12
+  - first:
+      213: 6931066164615107720
+    second: cashRegister_13
+  - first:
+      213: 2525824076767348635
+    second: cashRegister_14
+  - first:
+      213: 9208381523186120285
+    second: cashRegister_15
+  - first:
+      213: 859602643959039638
+    second: cashRegister_16
+  - first:
+      213: -4782532454349719481
+    second: cashRegister_17
+  - first:
+      213: -1645737249316132854
+    second: cashRegister_18
+  - first:
+      213: 6300870386718925412
+    second: cashRegister_19
+  - first:
+      213: 2223117698898921326
+    second: cashRegister_20
+  - first:
+      213: 4895164402018981239
+    second: cashRegister_21
+  - first:
+      213: 1006467381098335712
+    second: cashRegister_22
+  - first:
+      213: 6588373844126123225
+    second: cashRegister_23
+  - first:
+      213: 2501436552367201296
+    second: cashRegister_24
+  - first:
+      213: 8915745737490876634
+    second: cashRegister_25
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cashRegister_0
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 638
+        width: 172
+        height: 297
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 26, y: 43, z: 27, w: 30}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76ba6638b566f6449a500ddde8a187aa
+      internalID: -4962895389527774512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cashRegister_1
+      rect:
+        serializedVersion: 2
+        x: 1405
+        y: 515
+        width: 101
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 23, y: 34, z: 29, w: 25}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81adad437661a56448210efb0d72515c
+      internalID: -7332015561761311920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cashRegister_2
+      rect:
+        serializedVersion: 2
+        x: 1407
+        y: 409
+        width: 96
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 23, y: 31, z: 27, w: 28}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 670a142074375164587552920a48b505
+      internalID: 4125472049029605762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cashRegister_3
+      rect:
+        serializedVersion: 2
+        x: 1406
+        y: 303
+        width: 98
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 18, y: 32, z: 27, w: 23}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7094b88d97be094185dbc79bc97bcd4
+      internalID: -8787249350005452161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cashRegister_4
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 78
+        width: 960
+        height: 1086
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e80716effd7bc54ead812e82c7cf1a0
+      internalID: 1194870186283202588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 283f0c5adb82aa2489b0eb0abc5e10d3
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cashRegister_0: -4962895389527774512
+      cashRegister_1: -7332015561761311920
+      cashRegister_10: -6738332728838933099
+      cashRegister_11: -4223157577932137669
+      cashRegister_12: -7999578252026992064
+      cashRegister_13: 6931066164615107720
+      cashRegister_14: 2525824076767348635
+      cashRegister_15: 9208381523186120285
+      cashRegister_16: 859602643959039638
+      cashRegister_17: -4782532454349719481
+      cashRegister_18: -1645737249316132854
+      cashRegister_19: 6300870386718925412
+      cashRegister_2: 4125472049029605762
+      cashRegister_20: 2223117698898921326
+      cashRegister_21: 4895164402018981239
+      cashRegister_22: 1006467381098335712
+      cashRegister_23: 6588373844126123225
+      cashRegister_24: 2501436552367201296
+      cashRegister_25: 8915745737490876634
+      cashRegister_3: -8787249350005452161
+      cashRegister_4: 1194870186283202588
+      cashRegister_5: 2712756254717647670
+      cashRegister_6: -1701001446991912682
+      cashRegister_7: 8991428456129315486
+      cashRegister_8: -4321888650523292173
+      cashRegister_9: -6901716233662063401
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
