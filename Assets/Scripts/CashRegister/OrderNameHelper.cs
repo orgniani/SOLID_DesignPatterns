@@ -1,8 +1,8 @@
 using Orders;
 
-namespace UI
+namespace CashRegister
 {
-    public static class UIOrderNameHelper
+    public static class OrderNameHelper
     {
         public static string GetOrderName(IOrder order)
         {

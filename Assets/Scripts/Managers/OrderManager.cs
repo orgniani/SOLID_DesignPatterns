@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Notifications;
 using Discounts;
+using Orders;
 
-namespace Orders
+namespace Managers
 {
-    public class OrderManager
+    public class OrderManager : IOrderManager
     {
         private List<ISubscriber> _subscribers = new();
         private IDiscountStrategy _discountStrategy;
@@ -29,6 +30,7 @@ namespace Orders
         {
             float totalPrice = order.GetPrice();
             float finalPrice = _discountStrategy != null ? _discountStrategy.ApplyDiscount(totalPrice) : totalPrice;
+
 
             Debug.Log($"Final Price after discount: ${finalPrice}");
 

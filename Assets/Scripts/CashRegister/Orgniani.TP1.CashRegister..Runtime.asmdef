@@ -1,12 +1,13 @@
 {
-    "name": "Orgniani.TP1.UI.Runtime",
+    "name": "Orgniani.TP1.CashRegister.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:2ed4e7da15855be4da421fc7dbb2cc69",
         "GUID:c23ea63ff1f3f9f459aca3ddd8d08897",
         "GUID:63fdb090a1c583b46a2b5573528fa573",
-        "GUID:9c2ee73863de52c4491bab52893e313c"
+        "GUID:9c2ee73863de52c4491bab52893e313c",
+        "GUID:271318d57e68adf4ea516464557d7b5a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
