@@ -14,7 +14,7 @@ namespace Notifications
 
         public void Notify(string message)
         {
-            Debug.Log($"{_name}: {message}");
+            Debug.Log($"{_name}: {message} You can pick it up now.");
         }
     }
 }

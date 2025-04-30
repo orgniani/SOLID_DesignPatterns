@@ -57,6 +57,8 @@ namespace CashRegister
                 return;
             }
 
+            _orderManager.SetDiscountStrategy(null);
+
             _pendingOrders.Clear();
             OnPriceUpdate?.Invoke("");
             OnLog?.Invoke("Pending order canceled.");
@@ -64,18 +66,12 @@ namespace CashRegister
 
         public void ApplyDiscount(IDiscountStrategy discount, string name = null)
         {
-            bool isVolume = discount is VolumeDiscount;
-
             if (_orderManager.GetAppliedDiscount() != null)
             {
-                if (!isVolume)
-                    OnLog?.Invoke($"Cannot apply {name}: another discount has already been added");
-
-                else
-                    Debug.Log($"Cannot apply Volume Discount: another discount has already been added.");
-
+                OnLog?.Invoke($"Cannot apply {name}: another discount has already been added");
                 return;
             }
+
             _orderManager.SetDiscountStrategy(discount);
 
             if (!string.IsNullOrEmpty(name))
@@ -90,7 +86,8 @@ namespace CashRegister
                 return;
             }
 
-            ApplyDiscount(new VolumeDiscount());
+            if (_orderManager.GetAppliedDiscount() == null) 
+                ApplyDiscount(new VolumeDiscount());
 
             var fullOrder = BuildCompositeOrder();
             _orderManager.Subscribe(_currentCustomer);

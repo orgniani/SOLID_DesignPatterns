@@ -56,12 +56,7 @@ namespace CashRegister
                 yield return new WaitForSeconds(_delay);
             }
 
-
-            else if (discountAmount <= 0f)
-            {
-                AddLineToReceipt($" \n No discount found: -${discountAmount:F2}");
-            }
-                AddLineToReceipt("\n -----");
+            AddLineToReceipt("\n -----");
             yield return new WaitForSeconds(_delay);
 
             AddLineToReceipt($"Total: ${finalPrice:F2}");
@@ -80,6 +75,5 @@ namespace CashRegister
             else
                 return new List<IOrder> { order };
         }
-
     }
 }
