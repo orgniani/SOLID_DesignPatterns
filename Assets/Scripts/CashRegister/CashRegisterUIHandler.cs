@@ -13,14 +13,35 @@ namespace CashRegister
         private readonly TMP_InputField _customerInput;
         private readonly TMP_InputField _employeeInput;
 
-        public CashRegisterUIHandler(TMP_Text logText, TMP_Text priceText, TMP_InputField customerInput, TMP_InputField employeeInput)
+        private readonly TMP_Text _customerNotifText;
+        private readonly TMP_Text _employeeNotifText;
+
+        public CashRegisterUIHandler(TMP_Text logText, TMP_Text priceText,
+            TMP_InputField customerInput, TMP_InputField employeeInput, 
+            TMP_Text customerNotifText, TMP_Text employeeNotifText)
         {
             _logText = logText;
             _priceText = priceText;
 
             _customerInput = customerInput;
             _employeeInput = employeeInput;
+
+            _customerNotifText = customerNotifText;
+            _employeeNotifText = employeeNotifText;
         }
+
+        public void SetCustomerNotifText(string message)
+        {
+            if (_customerNotifText != null)
+                _customerNotifText.text = message;
+        }
+
+        public void SetEmployeeNotifText(string message)
+        {
+            if (_employeeNotifText != null)
+                _employeeNotifText.text = message;
+        }
+
 
         public void SetupButton(Button button, UnityEngine.Events.UnityAction callback)
         {

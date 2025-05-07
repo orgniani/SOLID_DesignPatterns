@@ -18,11 +18,6 @@ namespace Orders
             return _orders.Sum(order => order.GetPrice());
         }
 
-        public float GetPreparationTime()
-        {
-            return _orders.Sum(order => order.GetPreparationTime());
-        }
-
         public List<IOrder> GetOrders()
         {
             return _orders;

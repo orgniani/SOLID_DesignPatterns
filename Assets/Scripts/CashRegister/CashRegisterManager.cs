@@ -27,6 +27,10 @@ namespace CashRegister
         [SerializeField] private TMP_Text priceText;
         [SerializeField] private TMP_Text logText;
 
+        [Header("Notification Texts")]
+        [SerializeField] private TMP_Text customerNotifText;
+        [SerializeField] private TMP_Text employeeNotifText;
+
         [Header("Input Fields")]
         [SerializeField] private TMP_InputField employeeName;
         [SerializeField] private TMP_InputField customerName;
@@ -48,7 +52,7 @@ namespace CashRegister
 
             _orderManager = new OrderManager();
             _receiptManager = new ReceiptManager(_orderManager, receiptText, receiptTextDelay);
-            _uiHandler = new CashRegisterUIHandler(logText, priceText, customerName, employeeName);
+            _uiHandler = new CashRegisterUIHandler(logText, priceText, customerName, employeeName, customerNotifText, employeeNotifText);
             _orderProcessor = new OrderProcessor(_orderManager, _receiptManager, this, screenBlocker);
 
             _orderProcessor.OnLog += _uiHandler.SetLogText;
@@ -62,6 +66,9 @@ namespace CashRegister
 
             receiptText.text = "";
             screenBlocker.SetActive(false);
+
+            _orderProcessor.OnCustomerNotification += _uiHandler.SetCustomerNotifText;
+            _orderProcessor.OnEmployeeNotification += _uiHandler.SetEmployeeNotifText;
         }
 
         private void SetupButtons()
@@ -87,93 +94,37 @@ namespace CashRegister
 
         private void ValidateReferences()
         {
-            if (!createCoffeeButton)
-            {
-                Debug.LogError($"{name}: {nameof(createCoffeeButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(createCoffeeButton, nameof(createCoffeeButton))) return;
+            if (!ValidateReference(createTeaButton, nameof(createTeaButton))) return;
+            if (!ValidateReference(createCakeButton, nameof(createCakeButton))) return;
+            if (!ValidateReference(createComboButton, nameof(createComboButton))) return;
 
-            if (!createTeaButton)
-            {
-                Debug.LogError($"{name}: {nameof(createTeaButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(applyCashDiscountButton, nameof(applyCashDiscountButton))) return;
+            if (!ValidateReference(applyMembershipDiscountButton, nameof(applyMembershipDiscountButton))) return;
+            if (!ValidateReference(processOrderButton, nameof(processOrderButton))) return;
 
-            if (!createCakeButton)
-            {
-                Debug.LogError($"{name}: {nameof(createCakeButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(cancelOrderButton, nameof(cancelOrderButton))) return;
 
-            if (!createComboButton)
-            {
-                Debug.LogError($"{name}: {nameof(createComboButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(receiptText, nameof(receiptText))) return;
+            if (!ValidateReference(logText, nameof(logText))) return;
+            if (!ValidateReference(priceText, nameof(priceText))) return;
+            if (!ValidateReference(customerNotifText, nameof(customerNotifText))) return;
+            if (!ValidateReference(employeeNotifText, nameof(employeeNotifText))) return;
 
-            if (!applyCashDiscountButton)
-            {
-                Debug.LogError($"{name}: {nameof(applyCashDiscountButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(employeeName, nameof(employeeName))) return;
+            if (!ValidateReference(customerName, nameof(customerName))) return;
 
-            if (!applyMembershipDiscountButton)
-            {
-                Debug.LogError($"{name}: {nameof(applyMembershipDiscountButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            if (!ValidateReference(screenBlocker, nameof(screenBlocker))) return;
+        }
 
-            if (!processOrderButton)
-            {
-                Debug.LogError($"{name}: {nameof(processOrderButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+        private bool ValidateReference(Object reference, string referenceName)
+        {
+            if (reference != null) return true;
 
-            if (!cancelOrderButton)
-            {
-                Debug.LogError($"{name}: {nameof(cancelOrderButton)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
-
-            if (!receiptText)
-            {
-                Debug.LogError($"{name}: {nameof(receiptText)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
-
-            if (!logText)
-            {
-                Debug.LogError($"{name}: {nameof(logText)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
-
-            if (!priceText)
-            {
-                Debug.LogError($"{name}: {nameof(priceText)} is null!" +
-                               $"\nDisabling component to avoid errors.");
-                enabled = false;
-                return;
-            }
+            Debug.LogError($"{name}: {referenceName} is null!" +
+                           $"\nDisabling component to avoid errors.");
+            enabled = false;
+            return false;
         }
     }
 }

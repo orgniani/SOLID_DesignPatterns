@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Notifications
@@ -5,6 +6,8 @@ namespace Notifications
     public class Employee : ISubscriber
     {
         private string _name = "Employee";
+
+        public Action<string> OnNotify { get; set; }
 
         public Employee(string name)
         {
@@ -14,7 +17,10 @@ namespace Notifications
 
         public void Notify(string message)
         {
-            Debug.Log($"{_name}: {message} Please deliver it to the customer.");
+            string fullMessage = $"{_name}: {message} Please deliver it to the customer.";
+
+            Debug.Log(fullMessage);
+            OnNotify?.Invoke(fullMessage);
         }
     }
 }

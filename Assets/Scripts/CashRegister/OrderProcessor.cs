@@ -24,6 +24,9 @@ namespace CashRegister
         public event Action<string> OnPriceUpdate;
         public event Action OnOrderCompleted;
 
+        public event Action<string> OnCustomerNotification;
+        public event Action<string> OnEmployeeNotification;
+
         public OrderProcessor(
             IOrderManager orderManager,
             ReceiptManager receiptManager,
@@ -42,6 +45,9 @@ namespace CashRegister
             {
                 _currentCustomer = customer;
                 _currentEmployee = employee;
+
+                _currentCustomer.OnNotify = message => OnCustomerNotification?.Invoke(message);
+                _currentEmployee.OnNotify = message => OnEmployeeNotification?.Invoke(message);
             }
 
             _pendingOrders.Add(order);
@@ -104,16 +110,6 @@ namespace CashRegister
             OnPriceUpdate?.Invoke($"Total: ${finalPrice:F2}\n");
 
             yield return _coroutineHost.StartCoroutine(_receiptManager.BuildReceiptCoroutine(fullOrder));
-
-            float prepTime = fullOrder.GetPreparationTime();
-            float timer = prepTime;
-
-            while (timer > 0)
-            {
-                OnLog?.Invoke($"Preparing... {timer:F0} seconds left!");
-                timer -= Time.deltaTime;
-                yield return null;
-            }
 
             _orderManager.ProcessOrder(fullOrder);
             _pendingOrders.Clear();
